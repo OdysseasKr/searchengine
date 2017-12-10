@@ -1,0 +1,31 @@
+<html>
+<head>
+	{% include 'stylesheets.html'%}
+<body>
+	<div class="top">
+		<a href="/"><h1>Find Dat(a)</h1></a>
+		<br>
+		<br>
+		<a href="/">Repeat search with feedback</a>
+	</div>
+	<div class="resultlist">
+		{% for r in results %}
+		<div class="result">
+			<h3>{{ r.title }}</h3>
+			<a href="{{ r.url }}" target="_blank">{{ r.url }}</a>
+			<p>{{ r.excerpt }}</p>
+			<div class="rate">
+				<p>How good was this result?<p>
+				<span class="worst"></span>
+				<span class="worse"></span>
+				<span class="better"></span>
+				<span class="best"></span>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/results.js') }}"></script>
+</body>
+</html>

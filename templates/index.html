@@ -1,0 +1,33 @@
+<html>
+<head>
+	{% include 'stylesheets.html'%}
+</head>
+<body>
+	<div class="wrapper">
+		<h1>Find Dat(a)</h1>
+		<input id="searchbox"  type="text" placeholder="Type search terms">
+		<br>
+		<label for="collectionsel">Search in collection:</label>
+		<select id="collectionsel">
+			{% for c in collections %}
+				<option  value="{{ c }}">{{ c }}</option>
+			{% endfor %}
+		</select>
+		<div class="control-buttons">
+			<div class="searchtype">
+				<button class="searchbtn" id="vector">Vector space search</button>
+				<br>
+				<label for="topk">Number of results</label>
+				<input id="topk" type="number" value="20">
+			</div>
+			<div class="searchtype">
+				<button class="searchbtn" id="boolean">Boolean search</button>
+			</div>
+		</div>
+		<a href="/new-collection" id="crawl">Create new collection</a>
+	</div>
+
+	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>

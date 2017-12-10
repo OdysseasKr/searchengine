@@ -1,0 +1,26 @@
+<html>
+<head>
+	{% include 'stylesheets.html'%}
+</head>
+<body>
+	<div class="wrapper">
+		<h1>Find Dat(a)</h1>
+		<label for="collectionbox">Select files for a new collection</label>
+		<form id="mainform" method="post" enctype="multipart/form-data">
+			<input id="collectionbox" name="files" type="file" placeholder="Place files here" multiple>
+			<br>
+			<br>
+			<input id="namebox" name="name" type="text" placeholder="Collection name">
+			<br>
+			<br>
+		</form>
+		<button id="uploadbtn">Upload collection</button>
+		<br>
+		<br>
+		<p class="notice"></p>
+	</div>
+
+	<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+</body>
+</html>

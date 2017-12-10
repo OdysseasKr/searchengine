@@ -1,0 +1,138 @@
+body {
+	color: magenta;
+}
+
+button {
+	width: 10em;
+	padding: 1em;
+	border: 1px solid blue;
+	color: blue;
+	background-color: magenta;
+}
+
+button:active {
+	border: 1px solid magenta;
+	background-color: #b87ae9;
+}
+
+select {
+	border: 1px solid blue;
+	color: blue;
+	background-color: magenta;
+}
+
+a h1 {
+	color: magenta;
+}
+
+.wrapper {
+	width: 60%;
+	margin: 0px auto;
+	text-align: center;
+}
+
+.wrapper h1 {
+	font-size: 4em;
+	font-weight: bold;
+}
+
+#searchbox {
+	width: 100%;
+	padding: 20px;
+	font-size: 1.3em;
+	border: 1px solid magenta;
+	color: blue;
+}
+
+.control-buttons {
+	margin: 20px 0;
+	column-count: 2;
+}
+
+.control-buttons a:visited, a:link {
+	color: magenta;
+}
+
+.searchtype {
+	border-right: 1px solid magenta;
+	border-left: 1px solid magenta;
+	height: 10em;
+	padding: 1em;
+}
+
+.top {
+	height: 10%;
+	border-bottom: 1px solid magenta;
+}
+
+.top h1 {
+	display: inline-block;
+	margin: 0 1em 0 0;
+}
+
+.top input {
+	font-size: 1em;
+	padding: 0.6em;
+	border: 1px solid magenta;
+	color: blue;
+}
+
+.result {
+	width: 60%;
+	margin: 1em 0;
+}
+
+.result h3 {
+	font-size: 1.5em;
+}
+
+.result p {
+	color: violet;
+}
+
+.result a {
+	color: seagreen;
+}
+
+.result * {
+	margin: 0;
+	padding: 0;
+}
+
+.rate p {
+	display: inline-block;
+	margin-right: 2em;
+}
+
+.rate span.unsel {
+	color: lightgray;
+}
+
+.rate span::after {
+	font-family: FontAwesome;
+	cursor: pointer;
+}
+
+.worst::after, .worse::after{
+	content: "\f165";
+}
+
+.better::after, .best::after{
+	content: "\f164";
+}
+
+.worst {
+	color: red;
+}
+
+.worse {
+	color: orangered;
+}
+
+.better {
+	color: lightgreen;
+}
+
+.best {
+	color: green;
+}
