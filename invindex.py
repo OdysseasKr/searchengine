@@ -11,8 +11,8 @@ class InvertedIndexRAM:
 		self._docs = set()
 
 	def add(self, words, document):
-		for word, weight in words:
-			self.addOne(word, weight, document)
+		for w in words:
+			self.addOne(w, words[w], document)
 
 	def addOne(self, word, weight, document):
 		if word not in self._index:
@@ -45,8 +45,8 @@ class InvertedIndexDB:
 		self._doc_collection = self._database[self._collection_name+"DOCS"]
 
 	def add(self, words, document):
-		for word, weight in words:
-			self.addOne(word, weight, document)
+		for w in words:
+			self.addOne(w, words[w], document)
 
 	def addOne(self, word, weight, document):
 		# Maybe this can be optimized
