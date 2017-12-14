@@ -10,11 +10,11 @@ class InvertedIndexRAM:
 		self._index = {}
 		self._docs = set()
 
-	def add(self, words, document, weights):
-		for word, weight in zip(words,weights):
-			self.addOne(word, document, weight)
+	def add(self, words, document):
+		for word, weight in words:
+			self.addOne(word, weight, document)
 
-	def addOne(self, word, document, weight):
+	def addOne(self, word, weight, document):
 		if word not in self._index:
 			self._index[word] = [(document,weight)]
 		else:
@@ -44,11 +44,11 @@ class InvertedIndexDB:
 		self._collection = self._database[self._collection_name]
 		self._doc_collection = self._database[self._collection_name+"DOCS"]
 
-	def add(self, words, document, weights):
-		for word, weight in zip(words,weights):
-			self.addOne(word, document, weight)
+	def add(self, words, document):
+		for word, weight in words:
+			self.addOne(word, weight, document)
 
-	def addOne(self, word, document, weight):
+	def addOne(self, word, weight, document):
 		# Maybe this can be optimized
 		if self._collection.find_one({"word": word}):
 			self._collection.update_one(
