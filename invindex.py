@@ -9,7 +9,7 @@ class InvertedIndexRAM:
 	def __init__(self):
 		self._index = {}
 
-	def add(self, words, document, weights)
+	def add(self, words, document, weights):
 		for word, weight in zip(words,weights):
 			self.addOne(word, document, weight)
 
