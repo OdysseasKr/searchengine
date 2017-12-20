@@ -50,5 +50,14 @@ def preprocessCollection(name):
 
 			db.add(words_with_weights, filename)
 
+			description = soup.findAll(attrs={"property":"og:description"})
+			if len(description) != 0:
+				description = description[0]['content']
+			else:
+				descirption = 'Description unavailable'
+			db.setDocumentProperties(filename,
+										soup.title.string,
+										description)
+
 if __name__ == '__main__':
 	preprocessCollection("thomann")
