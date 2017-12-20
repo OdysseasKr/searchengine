@@ -31,6 +31,7 @@ def booleanSearch(exp_string, collection_name):
 				negation = True;
 				continue
 
+			tok = tok.lower()
 			docset = getDocumentSetByWord(index, tok)
 			if negation:
 				clause_results = clause_results - docset
