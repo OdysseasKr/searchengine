@@ -1,10 +1,12 @@
 import os
 import re
-from flask import Flask, render_template, request, url_for, jsonify
+from flask import Flask, render_template, request, url_for, jsonify, make_response
 from werkzeug.utils import secure_filename
 from fakedata import search_results
 from preprocess import preprocessCollection
 from collectionindexer import CollectionIndexer
+from searchalgorithms import booleanSearch
+from invindex import InvertedIndexDB
 
 app = Flask(__name__)
 
@@ -25,8 +27,33 @@ def homepage():
 
 @app.route("/results")
 def results():
-	query = request.args.get('q')
-	return render_template("results.html", results=search_results)
+	query = str(request.args.get('q'))
+	collection_name = str(request.args.get('collection'))
+	if request.args.get('type') == "boolean":
+		result_filenames = booleanSearch(query, collection_name)
+	else:
+		print("Not ready yet")
+
+	search_results = []
+	index = InvertedIndexDB(collection_name)
+	print(result_filenames)
+	for filename in result_filenames:
+		properties = index.getDocumentProperties(filename)
+		print(properties)
+		obj = {
+			"title": properties['title'],
+			"url": "/result/"+collection_name+"/"+filename,
+			"excerpt": properties['desc']
+		}
+		search_results.append(obj)
+
+	return render_template("results.html", results=search_results, type=request.args.get('type'))
+
+@app.route("/result/<collection>/<filename>")
+def result(collection, filename):
+    with open('collections/'+collection+'/'+filename, 'r') as f:
+        body = f.read()
+    return make_response((body, {}))
 
 @app.route("/new-collection")
 def newCollection():
