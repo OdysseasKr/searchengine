@@ -3,10 +3,10 @@ import os
 import re
 from collections import Counter
 
-#from invindex import *
 from bs4 import BeautifulSoup
 from nltk.stem.snowball import SnowballStemmer
 from nltk.corpus import stopwords
+from invindex import InvertedIndexDB
 
 def preprocessCollection(name):
 	# create a new collection
@@ -18,7 +18,7 @@ def preprocessCollection(name):
 	# check every html file inside the folder
 	for filename in os.listdir(directory):
 
-		if filename.endswith(".html"):
+		if filename.endswith(".html") or filename.endswith(".htm"):
 
 			soup = BeautifulSoup(open(directory + '/' + filename), 'html.parser')
 
