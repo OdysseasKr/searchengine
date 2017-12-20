@@ -6,7 +6,9 @@
 		<a href="/"><h1>Find Dat(a)</h1></a>
 		<br>
 		<br>
+		{% if type == vector %}
 		<a href="/">Repeat search with feedback</a>
+		{% endif %}
 	</div>
 	<div class="resultlist">
 		{% for r in results %}
@@ -14,6 +16,8 @@
 			<h3>{{ r.title }}</h3>
 			<a href="{{ r.url }}" target="_blank">{{ r.url }}</a>
 			<p>{{ r.excerpt }}</p>
+
+			{% if type == vector %}
 			<div class="rate">
 				<p>How good was this result?<p>
 				<span class="worst"></span>
@@ -21,6 +25,7 @@
 				<span class="better"></span>
 				<span class="best"></span>
 			</div>
+			{% endif %}
 		</div>
 		{% endfor %}
 	</div>
