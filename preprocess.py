@@ -9,6 +9,11 @@ from nltk.corpus import stopwords
 from invindex import InvertedIndexDB
 
 def preprocessCollection(name):
+	""" Preprocesses and adds to an InvertedIndexDB all of the documents in a collections
+	Parameters
+	----------
+	name: [String] the name of the collection
+	"""
 	# create a new collection
 	db = InvertedIndexDB(name)
 
