@@ -1,4 +1,4 @@
-from invindex import InvertedIndexRAM
+from invindex import InvertedIndexDB
 import tt
 
 def booleanSearch(exp_string, collection_name):
