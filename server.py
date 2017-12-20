@@ -2,6 +2,9 @@ import os
 from flask import Flask, render_template, request, url_for, jsonify
 from werkzeug.utils import secure_filename
 from fakedata import search_results
+from preprocess import preprocessCollection
+import re
+
 app = Flask(__name__)
 
 UPLOAD_FOLDER = 'collections'
@@ -30,7 +33,15 @@ def newCollection():
 
 @app.route('/uploadcollection', methods=['POST'])
 def upload():
-	folder = os.path.join(app.config['UPLOAD_FOLDER'], request.form['name'])
+	name = request.form['name']
+	pattern = re.compile("[^A-Za-z0-9_]")
+	if pattern.search(name) is not None:
+		return jsonify(
+			success=False,
+			message="The name and the filenames can only contain letters, numbers and underscores"
+		)
+
+	folder = os.path.join(app.config['UPLOAD_FOLDER'], name)
 	if os.path.isdir(folder):
 		return jsonify(
 			success=False,
@@ -40,7 +51,11 @@ def upload():
 	os.mkdir( folder );
 	for f in request.files.getlist("files"):
 		filename = secure_filename(f.filename)
+		if pattern.search(name) is not None:
+			continue;
 		f.save(os.path.join(folder, filename))
+
+	preprocessCollection(name)
 	return jsonify(
 		success=True
 	)

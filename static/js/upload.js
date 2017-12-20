@@ -20,7 +20,10 @@ $("#uploadbtn").click(function (e) {
 			xhr.upload.addEventListener("progress", function(evt) {
 				if (evt.lengthComputable) {
 					var percent = Math.floor((evt.loaded / evt.total) * 100);
-					$("#uploadbtn").text(percent + "%");
+					if (percent == 100)
+						$("#uploadbtn").text("Preprocessing collection");
+					else
+						$("#uploadbtn").text(percent + "%");
 				}
 			}, false);
 			return xhr;
