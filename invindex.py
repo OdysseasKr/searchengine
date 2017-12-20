@@ -128,10 +128,7 @@ class InvertedIndexDB:
 			return []
 
 	def setDocumentProperties(self, document, title, description):
-		print(title ,description)
 		if self._doc_collection.find_one({"name": document}):
-
-			print("YO")
 			self._doc_collection.update_one(
 				{"name": document},
 				{"$set": {

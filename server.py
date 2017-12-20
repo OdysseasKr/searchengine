@@ -37,10 +37,8 @@ def results():
 
 	search_results = []
 	index = InvertedIndexDB(collection_name)
-	print(result_filenames)
 	for filename in result_filenames:
 		properties = index.getDocumentProperties(filename)
-		print(properties)
 		obj = {
 			"title": properties['title'],
 			"url": "/result/"+collection_name+"/"+filename,
@@ -97,7 +95,6 @@ def upload():
 if __name__ == '__main__':
 	collections = os.walk(app.config['UPLOAD_FOLDER']).next()[1]
 	for c in collections:
-		print(c)
 		preprocessCollection(c)
 	colindex = CollectionIndexer(app.config['UPLOAD_FOLDER'])
 	colindex.addCurrentFolders()
