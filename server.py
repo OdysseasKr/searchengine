@@ -25,6 +25,7 @@ def homepage():
 	colindex = CollectionIndexer(app.config['UPLOAD_FOLDER'])
 	return render_template("index.html", collections=colindex.list)
 
+
 @app.route("/results")
 def results():
 	query = str(request.args.get('q'))
@@ -49,15 +50,18 @@ def results():
 
 	return render_template("results.html", results=search_results, type=request.args.get('type'))
 
+
 @app.route("/result/<collection>/<filename>")
 def result(collection, filename):
     with open('collections/'+collection+'/'+filename, 'r') as f:
         body = f.read()
     return make_response((body, {}))
 
+
 @app.route("/new-collection")
 def newCollection():
 	return render_template("upload.html")
+
 
 @app.route('/uploadcollection', methods=['POST'])
 def upload():
