@@ -99,4 +99,4 @@ if __name__ == '__main__':
 		preprocessCollection(c)
 	colindex = CollectionIndexer(app.config['UPLOAD_FOLDER'])
 	colindex.addCurrentFolders()
-	app.run(debug=True)
+	app.run()
