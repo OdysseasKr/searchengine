@@ -1,4 +1,3 @@
-import numpy as np
 from pymongo import MongoClient
 
 HOST = 'localhost'

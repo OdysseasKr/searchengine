@@ -1,8 +1,8 @@
 import os
 import re
+import nltk
 from flask import Flask, render_template, request, url_for, jsonify, make_response
 from werkzeug.utils import secure_filename
-from fakedata import search_results
 from preprocess import preprocessCollection
 from collectionindexer import CollectionIndexer
 from searchalgorithms import booleanSearch
@@ -93,6 +93,7 @@ def upload():
 	)
 
 if __name__ == '__main__':
+	nltk.download('stopwords')
 	collections = os.walk(app.config['UPLOAD_FOLDER']).next()[1]
 	for c in collections:
 		preprocessCollection(c)
