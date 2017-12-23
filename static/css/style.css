@@ -42,6 +42,12 @@ a h1 {
 	font-size: 1.3em;
 	border: 1px solid magenta;
 	color: blue;
+	margin-bottom: 1em;
+}
+
+#collectionsel {
+	font-size: 1.2em;
+	padding: 0.5em;
 }
 
 .control-buttons {
