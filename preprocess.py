@@ -47,6 +47,7 @@ def preprocessCollection(name):
 
 			# count how many times each word appears inside document
 			words_with_weights = Counter(stemmed_words)
+			words_with_weights = {x:float(words_with_weights[x])/len(stemmed_words) for x in words_with_weights}
 
 			db.add(words_with_weights, filename)
 
