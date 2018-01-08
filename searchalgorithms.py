@@ -19,6 +19,7 @@ def booleanSearch(exp_string, collection_name):
 		expression = tt.distribute_ands(expression)
 
 	# Get the result set for every AND clause
+	stemmer = SnowballStemmer("english", ignore_stopwords=True)
 	for clause in expression.iter_dnf_clauses():
 		clause_results = index.documents
 
@@ -32,6 +33,7 @@ def booleanSearch(exp_string, collection_name):
 				continue
 
 			tok = tok.lower()
+			tok = stemmer.stem(tok)
 			docset = getDocumentSetByWord(index, tok)
 			if negation:
 				clause_results = clause_results - docset
