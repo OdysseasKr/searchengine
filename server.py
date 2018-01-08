@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, url_for, jsonify, make_respon
 from werkzeug.utils import secure_filename
 from preprocess import preprocessCollection
 from collectionindexer import CollectionIndexer
-from searchalgorithms import booleanSearch
+from searchalgorithms import booleanSearch, vectorSearch
 from invindex import InvertedIndexDB
 
 app = Flask(__name__)
@@ -33,7 +33,7 @@ def results():
 	if request.args.get('type') == "boolean":
 		result_filenames = booleanSearch(query, collection_name)
 	else:
-		print("Not ready yet")
+		result_filenames = vectorSearch(query, collection_name)
 
 	search_results = []
 	index = InvertedIndexDB(collection_name)
