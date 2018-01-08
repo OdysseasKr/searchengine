@@ -1,5 +1,7 @@
 from invindex import InvertedIndexDB
 import tt
+import numpy as np
+import operator
 
 def booleanSearch(exp_string, collection_name):
 	""" Searches for documents that match the given boolean expression
@@ -45,6 +47,45 @@ def booleanSearch(exp_string, collection_name):
 		results = results | clause_results
 
 	return results
+
+
+
+def vectorSearch(input_doc, collection_name, limit=0., top_k=None):
+	"""
+	Return: Dictionary set with documents and their similarity ranking.
+	"""
+
+	index = InvertedIndexDB(collection_name)  # get a collection
+	documents = index.documents  # get all the documents of the collection
+
+	N = len(index.documents)  # the number of all the documents
+
+	docs_with_ranks = {}  # Dictionary with key: doc_name and value: rank
+
+	for t in input_doc:  # for every word of the input documents
+
+		docs_with_word = index.getDocumentsByWord(t)  # get all the docs that contain this word
+
+		nt = len(docs_with_word)  # the number of docs containing the word
+
+		IDF_t = np.log(1 + N/nt)
+
+		for doc in docs_with_word:  # for every document
+
+			doc_name = doc[0]  # get the name of the document
+			f_td = doc[1]  # get the frequency of the word for that document
+
+			TF_td = 1 + np.log(f_td)
+
+			docs_with_ranks[doc_name] += TF_td * IDF_t
+
+	# sort the documents by frequency
+	sorted_docs = sorted(docs_with_ranks.items(), key=operator.itemgetter(1), reverse=True)
+
+	results = sorted_docs[:top_k]  # get just the top_k docs
+
+	return results
+
 
 def getDocumentSetByWord(index, word):
 	docs = index.getDocumentsByWord(word)
