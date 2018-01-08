@@ -76,8 +76,10 @@ def vectorSearch(input_doc, collection_name, limit=0., top_k=None):
 			f_td = doc[1]  # get the frequency of the word for that document
 
 			TF_td = 1 + np.log(f_td)
-
-			docs_with_ranks[doc_name] += TF_td * IDF_t
+			if doc_name in docs_with_ranks:
+				docs_with_ranks[doc_name] += TF_td * IDF_t
+			else:
+				docs_with_ranks[doc_name] = 0
 
 	# sort the documents by frequency
 	sorted_docs = sorted(docs_with_ranks.items(), key=operator.itemgetter(1), reverse=True)
