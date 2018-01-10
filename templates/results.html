@@ -6,7 +6,7 @@
 		<a href="/"><h1>Find Dat(a)</h1></a>
 		<br>
 		<br>
-		{% if type == vector %}
+		{% if type == "vector" %}
 		<a href="/">Repeat search with feedback</a>
 		{% endif %}
 	</div>
@@ -17,7 +17,7 @@
 			<a href="{{ r.url }}" target="_blank">{{ r.url }}</a>
 			<p>{{ r.excerpt }}</p>
 
-			{% if type == vector %}
+			{% if type == "vector" %}
 			<div class="rate">
 				<p>How good was this result?<p>
 				<span class="worst"></span>
