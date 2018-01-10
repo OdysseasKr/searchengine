@@ -40,14 +40,15 @@ def preprocessCollection(name):
 						words.append(word)
 
 			# get rid of stopwords
-			filtered_words = [word for word in words if word not in stopwords.words('english')]
+			words_in_low = [word.lower() for word in words]
+			filtered_words = [word for word in words_in_low if word not in stopwords.words('english')]
 
 			stemmer = SnowballStemmer("english", ignore_stopwords=True)
 			stemmed_words = [stemmer.stem(word) for word in filtered_words]
 
 			# count how many times each word appears inside document
 			words_with_weights = Counter(stemmed_words)
-			words_with_weights = {x:float(words_with_weights[x])/len(stemmed_words) for x in words_with_weights}
+			#words_with_weights = {x:float(words_with_weights[x])/len(stemmed_words) for x in words_with_weights}
 
 			db.add(words_with_weights, filename)
 

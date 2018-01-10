@@ -33,8 +33,9 @@ def results():
 	if request.args.get('type') == "boolean":
 		result_filenames = booleanSearch(query, collection_name)
 	else:
-		result_filenames = vectorSearch(query, collection_name)
-
+		k = int(request.args.get('topk'))
+		result_filenames = vectorSearch(query, collection_name, top_k=k)
+	print(result_filenames)
 	search_results = []
 	index = InvertedIndexDB(collection_name)
 	for filename in result_filenames:
@@ -99,4 +100,4 @@ if __name__ == '__main__':
 		preprocessCollection(c)
 	colindex = CollectionIndexer(app.config['UPLOAD_FOLDER'])
 	colindex.addCurrentFolders()
-	app.run(debug=True)
+	app.run(debug=False)
