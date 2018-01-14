@@ -105,7 +105,21 @@ a h1 {
 	padding: 0;
 }
 
+.feedbacksearch:link, .feedbacksearch:visited {
+	color: magenta;
+}
+
+.fa-circle-o-notch {
+	display: none;
+}
+
+.feedbackmessage {
+	font-weight: bold;
+	color: blue;
+}
+
 .rate p {
+	color: blue;
 	display: inline-block;
 	margin-right: 2em;
 }

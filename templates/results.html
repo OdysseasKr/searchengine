@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 	{% include 'stylesheets.html'%}
@@ -7,15 +8,18 @@
 		<br>
 		<br>
 		{% if type == "vector" %}
-		<a href="/">Repeat search with feedback</a>
+		<a href="#" class="feedbacksearch">Repeat search with feedback</a>
+		<i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>
+		<div class="feedbackmessage"></div>
 		{% endif %}
+
 	</div>
 	<div class="resultlist">
 		{% if results|length == 0 %}
 		<h2>No results found</h2>
 		{% endif %}
 		{% for r in results %}
-		<div class="result">
+		<div class="result" data-resid="{{ r.id }}">
 			<h3>{{ r.title }}</h3>
 			<a href="{{ r.url }}" target="_blank">{{ r.url }}</a>
 			<p>{{ r.excerpt }}</p>
@@ -23,10 +27,8 @@
 			{% if type == "vector" %}
 			<div class="rate">
 				<p>How good was this result?<p>
-				<span class="worst"></span>
-				<span class="worse"></span>
-				<span class="better"></span>
-				<span class="best"></span>
+				<span class="worst" data-rate="bad"></span>
+				<span class="best" data-rate="good"></span>
 			</div>
 			{% endif %}
 		</div>

@@ -43,7 +43,8 @@ def results():
 		obj = {
 			"title": properties['title'],
 			"url": "/result/"+collection_name+"/"+filename,
-			"excerpt": properties['desc']
+			"excerpt": properties['desc'],
+			"id": filename
 		}
 		search_results.append(obj)
 
@@ -95,9 +96,11 @@ def upload():
 
 if __name__ == '__main__':
 	nltk.download('stopwords')
+	app.run(debug=False)
+
+def prepareCols():
 	collections = os.walk(app.config['UPLOAD_FOLDER']).next()[1]
 	for c in collections:
 		preprocessCollection(c)
 	colindex = CollectionIndexer(app.config['UPLOAD_FOLDER'])
 	colindex.addCurrentFolders()
-	app.run(debug=False)
