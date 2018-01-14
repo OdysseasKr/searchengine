@@ -23,7 +23,10 @@ def preprocessCollection(name):
 	# check every html file inside the folder
 	for filename in os.listdir(directory):
 
-		if filename.endswith(".html") or filename.endswith(".htm"):
+		if filename.endswith(".html") or filename.endswith(".htm"):	
+			
+			with open(directory + filename, 'r') as f:  #TODO: check if path is correct
+				doc_name = f.readline()
 
 			soup = BeautifulSoup(open(directory + '/' + filename), 'html.parser')
 
@@ -50,7 +53,7 @@ def preprocessCollection(name):
 			words_with_weights = Counter(stemmed_words)
 			#words_with_weights = {x:float(words_with_weights[x])/len(stemmed_words) for x in words_with_weights}
 
-			db.add(words_with_weights, filename)
+			db.add(words_with_weights, doc_name)
 
 			description = soup.findAll(attrs={"property":"og:description"})
 			if len(description) != 0:
