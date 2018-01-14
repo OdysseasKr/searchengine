@@ -1,19 +1,20 @@
 import scrapy
-from scrapy.linkextractor import LinkExtractor
+from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule, CrawlSpider
 
 class Spider(CrawlSpider):
     name = "lucy"
 
-    allowed_domains = ["e-shop.gr"]
+    allowed_domains = ["thomann.de"]
 
     start_urls = [
-        "http://www.e-shop.gr/",
+        "https://www.thomann.de/gb/index.html",
     ]
 
     rules = [
             Rule(
                 LinkExtractor(
+                    allow='/gb/',
                     canonicalize=True,
                     unique=True
                 ),
@@ -28,26 +29,27 @@ class Spider(CrawlSpider):
 
 
     def parse_items(self, response):
+        # The list of items that are found on the particular page
         items = []
-
+        # Only extract canonicalized and unique links (with respect to the current page)
         links = LinkExtractor(canonicalize=True, unique=True).extract_links(response)
-
+        # Now go through all the found links
         for link in links:
+            # Check whether the domain of the URL of the link is allowed; so whether it is in one of the allowed domains
             is_allowed = False
-
             for allowed_domain in self.allowed_domains:
-                if (allowed_domain in link.url):
+                if allowed_domain in link.url:
                     is_allowed = True
-
-            if (is_allowed):
+            # If it is allowed, create a new item and add it to the list of found items
+            if is_allowed:
                 path = '/PATH/TO/STORE/PAGES'
-                filename = path + response.url.split("/")[-1] + '.html'
-                
+                filename = path + response.url.split("/")[-1]
                 with open(filename, 'wb') as f:
+                    f.write(response.url + "\n")
                     f.write(response.body)
 
                 item = [response.url, link.url]
                 items.append(item)
                 print(item)
-
+        # Return all the found items
         return items
