@@ -28,7 +28,7 @@ $(".feedbacksearch").on("click", function (e) {
 	showLoading();
 	$(".feedbacksearch").text("New results");
 	$.ajax({
-		url: "/feedbacksearch",
+		url: "/feedbacksearch"+window.location.search,
 		method: "POST",
 		data: rates
 	}).done(function (res) {
