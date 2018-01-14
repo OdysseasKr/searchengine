@@ -34,6 +34,8 @@ $(".feedbacksearch").on("click", function (e) {
 		data: JSON.stringify(rates)
 	}).done(function (res) {
 		$(".feedbackmessage").text("New results");
+		var rates = {"good":[], "bad":[]};
+		$(".unsel, .sel").removeClass("unsel").removeClass("sel");
 		hideLoading();
 		console.log(res);
 	}).fail(function (res) {
