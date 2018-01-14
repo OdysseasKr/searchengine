@@ -30,7 +30,8 @@ $(".feedbacksearch").on("click", function (e) {
 	$.ajax({
 		url: "/feedbacksearch"+window.location.search,
 		method: "POST",
-		data: rates
+		contentType: "application/json",
+		data: JSON.stringify(rates)
 	}).done(function (res) {
 		$(".feedbackmessage").text("New results");
 		hideLoading();

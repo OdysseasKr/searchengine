@@ -50,6 +50,29 @@ def results():
 
 	return render_template("results.html", results=search_results, type=request.args.get('type'))
 
+@app.route("/feedbacksearch", methods=['POST'])
+def feedbackresults():
+	query = str(request.args.get('q'))
+	collection_name = str(request.args.get('collection'))
+	goodRes = request.get_json()['good']
+	badRes = request.get_json()['bad']
+	return "Done";
+
+	result_filenames = feedbackSearch(query, collection_name, top_k=k)
+	print(result_filenames)
+	search_results = []
+	index = InvertedIndexDB(collection_name)
+	for filename in result_filenames:
+		properties = index.getDocumentProperties(filename)
+		obj = {
+			"title": properties['title'],
+			"url": "/result/"+collection_name+"/"+filename,
+			"excerpt": properties['desc'],
+			"id": filename
+		}
+		search_results.append(obj)
+
+	return render_template("results.html", results=search_results, type=request.args.get('type'))
 
 @app.route("/result/<collection>/<filename>")
 def result(collection, filename):
@@ -96,7 +119,7 @@ def upload():
 
 if __name__ == '__main__':
 	nltk.download('stopwords')
-	app.run(debug=False)
+	app.run(debug=True)
 
 def prepareCols():
 	collections = os.walk(app.config['UPLOAD_FOLDER']).next()[1]
