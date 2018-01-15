@@ -86,6 +86,7 @@ class InvertedIndexDB:
 		"""
 		for w in words:
 			self.addOne(w, words[w], document)
+		self._doc_collection.insert_one({"name": document})
 
 	def addOne(self, word, weight, document):
 		""" Adds the given document in association with the given word and weight
@@ -113,9 +114,6 @@ class InvertedIndexDB:
 					"weight": weight
 				}]
 			})
-
-		if not self._doc_collection.find_one({"name": document}):
-			self._doc_collection.insert_one({"name": document})
 
 	def getDocumentsByWord(self, word):
 		"""  Returns the documents associated with the given word
