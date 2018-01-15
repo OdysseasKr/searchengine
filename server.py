@@ -117,13 +117,14 @@ def upload():
 		success=True
 	)
 
-if __name__ == '__main__':
-	nltk.download('stopwords')
-	app.run(debug=True)
-
 def prepareCols():
 	collections = os.walk(app.config['UPLOAD_FOLDER']).next()[1]
 	for c in collections:
 		preprocessCollection(c)
 	colindex = CollectionIndexer(app.config['UPLOAD_FOLDER'])
 	colindex.addCurrentFolders()
+
+if __name__ == '__main__':
+	nltk.download('stopwords')
+	#prepareCols();
+	app.run(debug=False)
