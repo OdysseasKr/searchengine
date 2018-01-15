@@ -124,6 +124,14 @@ class InvertedIndexDB:
 		else:
 			return []
 
+	def getWordsByDocument(self, doc):
+		"""  Returns the documents associated with the given word
+		"""
+		items = self._collection.find({"docs.docname":doc},
+									{ "word": 1, "docs.$": 1 })
+		result = {w['word']: w['docs'][0]['weight'] for w in items}
+		return result
+
 	def setDocumentProperties(self, document, title, description):
 		if self._doc_collection.find_one({"name": document}):
 			self._doc_collection.update_one(
