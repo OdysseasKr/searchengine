@@ -26,7 +26,7 @@ def preprocessCollection(name):
 		if filename.endswith(".html") or filename.endswith(".htm"):
 
 			with open(directory + '/' + filename, 'r') as f:  #TODO: check if path is correct
-				doc_name = f.readline()
+				doc_name = f.readline().strip()
 
 			soup = BeautifulSoup(open(directory + '/' + filename), 'html.parser')
 
