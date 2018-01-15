@@ -37,7 +37,7 @@ $(".feedbacksearch").on("click", function (e) {
 		var rates = {"good":[], "bad":[]};
 		$(".unsel, .sel").removeClass("unsel").removeClass("sel");
 		hideLoading();
-		console.log(res);
+		displayNewResults(res);
 	}).fail(function (res) {
 		$(".feedbackmessage").text("There has been an error");
 		hideLoading();
@@ -53,4 +53,29 @@ function showLoading() {
 function hideLoading() {
 	$(".fa-circle-o-notch").css("display","none");
 	$(".feedbacksearch").text("Repeat search with feedback");
+}
+
+function displayNewResults(res) {
+	$(".resultlist").empty();
+	for (var i=0; i<res.length; i++) {
+		result = res[i];
+		var outterDiv = $("<div></div", {
+			class: "result",
+			"data-resid": result.id
+		});
+		$("<h3></h3>", {
+			text: result.title
+		}).appendTo(outterDiv);
+		$("<a></a>", {
+			text: result.url,
+			href: result.url
+		}).appendTo(outterDiv);
+		$("<p></p>", {
+			text: result.excerpt
+		}).appendTo(outterDiv);
+
+		$('<div class="rate"><p>How good was this result?<p><span class="best" data-rate="good"></span><span class="worst" data-rate="bad"></span></div>').appendTo(outterDiv);
+
+		$(".resultlist").append(outterDiv);
+	}
 }
