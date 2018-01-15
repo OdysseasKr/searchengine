@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, url_for, jsonify, make_respon
 from werkzeug.utils import secure_filename
 from preprocess import preprocessCollection
 from collectionindexer import CollectionIndexer
-from searchalgorithms import booleanSearch, vectorSearch
+from searchalgorithms import booleanSearch, vectorSearch, feedbackSearch
 from invindex import InvertedIndexDB
 
 app = Flask(__name__)
@@ -48,7 +48,7 @@ def results():
 		properties = index.getDocumentProperties(filename)
 		obj = {
 			"title": properties['title'],
-			"url": "/result/"+collection_name+"/"+filename,
+			"url": filename,
 			"excerpt": properties['desc'],
 			"id": filename
 		}
@@ -64,12 +64,11 @@ def feedbackresults():
 	collection_name = str(request.args.get('collection'))
 	goodRes = request.get_json()['good']
 	badRes = request.get_json()['bad']
-	return "Done";
+	k = int(request.args.get('topk'))
 
 	# Find results from the algorithm
-	result_filenames = feedbackSearch(query, collection_name, top_k=k)
+	result_filenames = feedbackSearch(query, goodRes, badRes, collection_name, top_k=k)
 	print(result_filenames)
-
 
 	# Get documents for results
 	search_results = []
