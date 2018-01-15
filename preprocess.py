@@ -23,9 +23,9 @@ def preprocessCollection(name):
 	# check every html file inside the folder
 	for filename in os.listdir(directory):
 
-		if filename.endswith(".html") or filename.endswith(".htm"):	
-			
-			with open(directory + filename, 'r') as f:  #TODO: check if path is correct
+		if filename.endswith(".html") or filename.endswith(".htm"):
+
+			with open(directory + '/' + filename, 'r') as f:  #TODO: check if path is correct
 				doc_name = f.readline()
 
 			soup = BeautifulSoup(open(directory + '/' + filename), 'html.parser')
@@ -60,7 +60,7 @@ def preprocessCollection(name):
 				description = description[0]['content']
 			else:
 				descirption = 'Description unavailable'
-			db.setDocumentProperties(filename,
+			db.setDocumentProperties(doc_name,
 										soup.title.string,
 										description)
 
