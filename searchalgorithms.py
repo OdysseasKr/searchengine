@@ -52,8 +52,15 @@ def booleanSearch(exp_string, collection_name):
 
 
 
-def vectorSearch(input_doc, collection_name, limit=0., top_k=None):
+def vectorSearch(input_doc, collection_name, rank_algo='alt_dot', limit=0., top_k=None):
 	"""
+	input_doc: the query
+	collection_name: which collection to search
+	rank_algo: the algorithm to calculate the similarity
+		'alt_dot': alternative dot
+		'dot': simple dot (supports feedback)
+	limit: show results that have a rank higher from the limit
+	top_k: how many of the top results to return
 	Return: Dictionary set with documents and their similarity ranking.
 	"""
 
@@ -79,13 +86,23 @@ def vectorSearch(input_doc, collection_name, limit=0., top_k=None):
 
 				doc_name = doc[0]  # get the name of the document
 				f_td = doc[1]  # get the frequency of the word for that document
-
 				TF_td = 1 + np.log(f_td)
+				w_td = TF_td * IDF_t
+				
+				if (rank_algo=='dot'):
+					t_num = input_doc.count(t)  # count how many times t shows in query
+					f_tq = t_num / len(input_doc)  # get the frequency of the word in the query
+					TF_tq = 1 + np.log(f_tq)
+					w_tq = TF_tq * IDF_t
+					rank = w_td * w_tq
+				# elif (rank_algo=='alt_dot'):
+				else:
+					rank = w_td
 
 				if doc_name in docs_with_ranks:
-					docs_with_ranks[doc_name] += TF_td * IDF_t
+					docs_with_ranks[doc_name] += rank
 				else:
-					docs_with_ranks[doc_name] = TF_td * IDF_t
+					docs_with_ranks[doc_name] = rank
 
 	# sort the documents by frequency
 	sorted_docs = sorted(docs_with_ranks.items(), key=operator.itemgetter(1), reverse=True)
