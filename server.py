@@ -122,14 +122,14 @@ def upload():
 			continue;
 		f.save(os.path.join(folder, filename))
 
-	preprocessCollection(name)
+	preprocessCollection(name, uploaded=True)
 	colindex = CollectionIndexer(app.config['UPLOAD_FOLDER'])
 	colindex.addCollection(name)
 	return jsonify(
 		success=True
 	)
 
-def prepareCols():
+def prepareLocalCols():
 	"""
 	Preprocesses and adds local collections in the db
 	"""
@@ -141,5 +141,5 @@ def prepareCols():
 
 if __name__ == '__main__':
 	nltk.download('stopwords')
-	#prepareCols();
+	#prepareLocalCols();
 	app.run(debug=False)

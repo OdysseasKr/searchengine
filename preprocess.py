@@ -8,7 +8,7 @@ from nltk.stem.snowball import SnowballStemmer
 from nltk.corpus import stopwords
 from invindex import InvertedIndexDB
 
-def preprocessCollection(name):
+def preprocessCollection(name, uploaded=False):
 	""" Preprocesses and adds to an InvertedIndexDB all of the documents in a collections
 	Parameters
 	----------
@@ -24,9 +24,11 @@ def preprocessCollection(name):
 	for filename in os.listdir(directory):
 
 		if filename.endswith(".html") or filename.endswith(".htm"):
-
-			with open(directory + '/' + filename, 'r') as f:  #TODO: check if path is correct
-				doc_name = f.readline().strip()
+			if not uploaded:
+				with open(directory + '/' + filename, 'r') as f:  #TODO: check if path is correct
+					doc_name = f.readline().strip()
+			else:
+				doc_name = '/result/' + name + '/' + filename
 
 			soup = BeautifulSoup(open(directory + '/' + filename), 'html.parser')
 
