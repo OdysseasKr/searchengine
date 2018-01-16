@@ -134,12 +134,15 @@ def prepareLocalCols():
 	Preprocesses and adds local collections in the db
 	"""
 	collections = os.walk(app.config['UPLOAD_FOLDER']).next()[1]
-	for c in collections:
-		preprocessCollection(c)
+
 	colindex = CollectionIndexer(app.config['UPLOAD_FOLDER'])
-	colindex.addCurrentFolders()
+	collist = colindex.list
+	for c in collections:
+		if c not in collist:
+			preprocessCollection(c)
+			colindex.addCollection(c)
 
 if __name__ == '__main__':
 	nltk.download('stopwords')
-	#prepareLocalCols();
+	prepareLocalCols();
 	app.run(debug=False)
