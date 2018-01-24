@@ -178,16 +178,16 @@ def getNewQuery(q0, R, NR, index):
 		for w in words:
 			if w not in qm:
 				qm[w] = 0
-			qm[w] += b * words[w] / len(R)
-
+			qm[w] += b * words[w] / float(len(R))
 	for doc in NR:
+		print(doc)
 		words = index.getWordsByDocument(doc)
+		print(words)
 		for w in words:
 			if w not in qm:
 				qm[w] = 0
-			qm[w] -= c * words[w] / len(NR)
-
-	return qm
+			qm[w] -= c * words[w] / float(len(NR))
+	return {x : y for x,y in qm.items() if y!=0}
 
 def preprocess_query(query):
 	words_in_low = [word.lower() for word in query.split()]
