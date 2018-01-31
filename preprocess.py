@@ -6,7 +6,7 @@ from collections import Counter
 from bs4 import BeautifulSoup
 from nltk.stem.snowball import SnowballStemmer
 from nltk.corpus import stopwords
-from invindex import InvertedIndexDB
+from invindex import IndexCreator
 
 def preprocessCollection(name, uploaded=False):
 	""" Preprocesses and adds to an InvertedIndexDB all of the documents in a collections
@@ -15,7 +15,7 @@ def preprocessCollection(name, uploaded=False):
 	name: [String] the name of the collection
 	"""
 	# create a new collection
-	db = InvertedIndexDB(name)
+	db = IndexCreator(name)
 
 	# path to folder with html files
 	directory = 'collections/{}'.format(name)
@@ -65,6 +65,7 @@ def preprocessCollection(name, uploaded=False):
 			db.setDocumentProperties(doc_name,
 										soup.title.string,
 										description)
+	db.close()
 
 if __name__ == '__main__':
 	preprocessCollection("thomann")

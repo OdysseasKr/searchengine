@@ -4,12 +4,24 @@ HOST = 'localhost'
 PORT = 27017
 DATABASE_NAME = 'testdb'
 
-class InvertedIndexRAM:
-	""" Inverted index data structure stored in RAM
-	"""
-	def __init__(self):
+class IndexCreator:
+	def __init__(self, collection_name):
+		"""
+		Parameters
+		----------
+		collection_name: [String] the name of the collection to access
+		"""
+		self._counter = 0
+		self.LIMIT = 10**10
+		self._collection_name = collection_name
+
 		self._index = {}
-		self._docs = set()
+		self._docs = {}
+
+		self._connection = MongoClient(HOST, PORT)
+		self._database = self._connection[DATABASE_NAME]
+		self._collection = self._database[self._collection_name]
+		self._doc_collection = self._database[self._collection_name+"DOCS"]
 
 	def add(self, words, document):
 		""" Adds the given document in association with the given word list
@@ -22,9 +34,15 @@ class InvertedIndexRAM:
  		document: [String] filename of the document
 		"""
 		for w in words:
-			self.addOne(w, words[w], document)
+			self._addOne(w, words[w], document)
 
-	def addOne(self, word, weight, document):
+		self._docs[document] = {"name": document, "title": "", "desc": ""}
+
+		self._counter += (len(words))
+		if self._counter >= self.LIMIT:
+			self._store()
+
+	def _addOne(self, word, weight, document):
 		""" Adds the given document in association with the given word and weight
 		Parameters
 		----------
@@ -36,27 +54,40 @@ class InvertedIndexRAM:
 			self._index[word] = [(document,weight)]
 		else:
 			self._index[word].append((document,weight))
-		self._docs.add(document)
 
-	def getDocumentsByWord(self, word):
-		"""  Returns the documents associated with the given word
-		"""
-		if word not in self._index:
-			return [];
-		return self._index[word]
+	def setDocumentProperties(self, document, title, description):
+		self._docs[document] = {
+			"name": document,
+			"title": title,
+			"desc": description
+		}
 
-	@property
-	def corpus(self):
-		"""  A set of all words
-		"""
-		return set(self._index.keys())
+	def _store_word(self, word, values):
+		formatted_values = list(map(lambda x: {"docname":x[0], "weight": x[1]}, values))
+		if self._collection.find_one({"word": word}):
+			self._collection.update_one(
+				{"word": word},
+				{'$push': {'docs': {
+					'$each': values
+				}}}
+			)
+		else:
+			self._collection.insert_one({
+				"word": word,
+				"docs": formatted_values
+		})
 
-	@property
-	def documents(self):
-		"""  A set of all filenames
-		"""
-		return self._docs
+	def store(self):
+		for word in self._index.keys():
+			self._store_word(word, self._index[word])
 
+		self._doc_collection.insert_many(self._docs.values())
+		self.docs = {}
+		self.index = {}
+		self._counter = 0;
+
+	def close(self):
+		self.store()
 
 class InvertedIndexDB:
 	""" Inverted index data structure stored in MongoDB
