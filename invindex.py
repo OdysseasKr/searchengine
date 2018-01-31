@@ -5,6 +5,10 @@ PORT = 27017
 DATABASE_NAME = 'testdb'
 
 class IndexCreator:
+	""" Used to create an inverted index. It uses RAM until self.LIMIT is reached.
+	Then stores everything in the mongo database, emptys RAM and continue creating in RAM.
+	Remember to call close when finished.
+	"""
 	def __init__(self, collection_name):
 		"""
 		Parameters
@@ -56,6 +60,13 @@ class IndexCreator:
 			self._index[word].append((document,weight))
 
 	def setDocumentProperties(self, document, title, description):
+		""" Sets the document properties
+		Parameters
+		----------
+		document: document name
+		title: document title
+		description: short excerpt from document
+		"""
 		self._docs[document] = {
 			"name": document,
 			"title": title,
@@ -63,6 +74,12 @@ class IndexCreator:
 		}
 
 	def _store_word(self, word, values):
+		""" Stores an occurency list of a specific word to the mongo db
+		Parameters
+		----------
+		word: the word to be associated with the given list
+		values: the occurency list
+		"""
 		formatted_values = list(map(lambda x: {"docname":x[0], "weight": x[1]}, values))
 		if self._collection.find_one({"word": word}):
 			self._collection.update_one(
@@ -78,6 +95,8 @@ class IndexCreator:
 		})
 
 	def store(self):
+		""" Stores the whole index in the database and empties RAM
+		"""
 		for word in self._index.keys():
 			self._store_word(word, self._index[word])
 
@@ -87,6 +106,8 @@ class IndexCreator:
 		self._counter = 0;
 
 	def close(self):
+		""" Stores the remaining of the index that resides in RAM, to the mongo db
+		"""
 		self.store()
 
 class InvertedIndexDB:

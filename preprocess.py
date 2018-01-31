@@ -38,7 +38,7 @@ def preprocessCollection(name, uploaded=False):
 			words = []
 			# convert the text in list of words ignoring white spaces and special characters
 			for text in document:
-				list_of_words = text.split() # re.split(" ", text)  # split just by space
+				list_of_words = text.split() # split just by space
 
 				for word in list_of_words:
 					if (word.isalnum()):  # keep just clean text, if it contains special character ignore
@@ -55,8 +55,10 @@ def preprocessCollection(name, uploaded=False):
 			words_with_weights = Counter(stemmed_words)
 			#words_with_weights = {x:float(words_with_weights[x])/len(stemmed_words) for x in words_with_weights}
 
+			# add list of words and weights to index
 			db.add(words_with_weights, doc_name)
 
+			# get document properties and store them in the document list
 			description = soup.findAll(attrs={"property":"og:description"})
 			if len(description) != 0:
 				description = description[0]['content']
@@ -65,7 +67,7 @@ def preprocessCollection(name, uploaded=False):
 			db.setDocumentProperties(doc_name,
 										soup.title.string,
 										description)
-	db.close()
+	db.close() # close index in order to be saved to disk
 
 if __name__ == '__main__':
 	preprocessCollection("thomann")

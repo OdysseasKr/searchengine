@@ -105,6 +105,7 @@ def newCollection():
 """ Endpoint for uploading files for a new collection """
 @app.route('/uploadcollection', methods=['POST'])
 def upload():
+	# Validate collection name
 	name = request.form['name']
 	pattern = re.compile("[^A-Za-z0-9_]")
 	if pattern.search(name) is not None:
@@ -113,6 +114,7 @@ def upload():
 			message="The name and the filenames can only contain letters, numbers and underscores"
 		)
 
+	# Check that there is no collection with this name
 	folder = os.path.join(app.config['UPLOAD_FOLDER'], name)
 	if os.path.isdir(folder):
 		return jsonify(
@@ -147,8 +149,10 @@ def prepareLocalCols():
 	"""
 	Preprocesses and adds local collections in the db
 	"""
+	# Get all folders in collection directory
 	collections = os.walk(app.config['UPLOAD_FOLDER']).next()[1]
 
+	# If the folder is not already in the collection catalogue, preprocess and add it
 	colindex = CollectionIndexer(app.config['UPLOAD_FOLDER'])
 	collist = colindex.list
 	for c in collections:
