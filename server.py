@@ -1,6 +1,7 @@
 import os
 import re
 import nltk
+import zipfile
 from flask import Flask, render_template, request, url_for, jsonify, make_response
 from werkzeug.utils import secure_filename
 from preprocess import preprocessCollection
@@ -115,13 +116,22 @@ def upload():
 			message="This collection name exists"
 		)
 
+	# Save zip
 	os.mkdir( folder );
-	for f in request.files.getlist("files"):
-		filename = secure_filename(f.filename)
-		if pattern.search(name) is not None:
-			continue;
-		f.save(os.path.join(folder, filename))
+	f = request.files.getlist("files")[0]
+	filename = secure_filename(f.filename)
+	zip_filename = os.path.join(folder, filename)
+	f.save(zip_filename)
 
+	# Export zip_filename
+	zip_file = zipfile.ZipFile(zip_filename, 'r')
+	zip_file.extractall(folder)
+	zip_file.close()
+
+	# Delete zip
+	os.remove(zip_filename)
+
+	# Preprocess collection and add to index
 	preprocessCollection(name, uploaded=True)
 	colindex = CollectionIndexer(app.config['UPLOAD_FOLDER'])
 	colindex.addCollection(name)
