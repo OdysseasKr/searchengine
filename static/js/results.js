@@ -1,6 +1,7 @@
 var rates = {"good":[], "bad":[]};
+var curr_query = false;
 
-$(".rate span").on("click", function (e) {
+$(document).on("click", ".rate span", function (e) {
 	var target = $(e.target);
 	var spans = target.parent().find("span");
 	if (target.hasClass("sel")) return;
@@ -31,13 +32,18 @@ $(".feedbacksearch").on("click", function (e) {
 		url: "/feedbacksearch"+window.location.search,
 		method: "POST",
 		contentType: "application/json",
-		data: JSON.stringify(rates)
+		data: JSON.stringify({
+			"query": curr_query,
+			"good": rates.good,
+			"bad": rates.bad
+		})
 	}).done(function (res) {
 		$(".feedbackmessage").text("New results");
 		var rates = {"good":[], "bad":[]};
 		$(".unsel, .sel").removeClass("unsel").removeClass("sel");
 		hideLoading();
-		displayNewResults(res);
+		curr_query = res['query']
+		displayNewResults(res["search_results"]);
 	}).fail(function (res) {
 		$(".feedbackmessage").text("There has been an error");
 		hideLoading();

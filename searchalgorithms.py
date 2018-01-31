@@ -128,8 +128,14 @@ def feedbackSearch(input_doc, R, NR, collection_name, limit=0., top_k=None):
 	documents = index.documents  # get all the documents of the collection
 	N = len(index.documents)  # the number of all the documents
 
-	input_doc = preprocess_query(input_doc)
-	q0 = Counter(input_doc)
+	if type(input_doc) is str:
+		input_doc = preprocess_query(input_doc)
+		q0 = Counter(input_doc)
+	elif type(input_doc) is str:
+		q0 = input_doc
+	else:
+		raise ValueError("Query must be a string or a dictionary")
+
 	qm = getNewQuery(q0, R, NR, index)
 
 	docs_with_ranks = {}
@@ -165,7 +171,7 @@ def feedbackSearch(input_doc, R, NR, collection_name, limit=0., top_k=None):
 
 	if len(results) == 0:
 		return []
-	return list(zip(*results)[0])
+	return list(zip(*results)[0]), qm
 
 def getNewQuery(q0, R, NR, index):
 	a = 1; b = 1; c = 1
@@ -180,9 +186,7 @@ def getNewQuery(q0, R, NR, index):
 				qm[w] = 0
 			qm[w] += b * words[w] / float(len(R))
 	for doc in NR:
-		print(doc)
 		words = index.getWordsByDocument(doc)
-		print(words)
 		for w in words:
 			if w not in qm:
 				qm[w] = 0

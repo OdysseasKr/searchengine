@@ -40,7 +40,6 @@ def results():
 	else:
 		k = int(request.args.get('topk'))
 		result_filenames = vectorSearch(query, collection_name, top_k=k)
-	print(result_filenames)
 
 	# Get documents for results
 	search_results = []
@@ -61,18 +60,23 @@ def results():
 @app.route("/feedbacksearch", methods=['POST'])
 def feedbackresults():
 	# Get search parameters
-	query = str(request.args.get('q'))
+	if request.get_json()['query'] != False:
+		query = request.get_json()['query']
+	else:
+		query = str(request.args.get('q'))
 	collection_name = str(request.args.get('collection'))
 	goodRes = request.get_json()['good']
 	badRes = request.get_json()['bad']
 	k = int(request.args.get('topk'))
 
 	# Find results from the algorithm
-	result_filenames = feedbackSearch(query, goodRes, badRes, collection_name, top_k=k)
-	print(result_filenames)
+	result_filenames, new_query = feedbackSearch(query, goodRes, badRes, collection_name, top_k=k)
 
 	# Get documents for results
-	search_results = []
+	result = {
+		"search_results": [],
+		"query": new_query
+	}
 	index = InvertedIndexDB(collection_name)
 	for filename in result_filenames:
 		properties = index.getDocumentProperties(filename)
@@ -82,9 +86,9 @@ def feedbackresults():
 			"excerpt": properties['desc'],
 			"id": filename
 		}
-		search_results.append(obj)
+		result["search_results"].append(obj)
 
-	return jsonify(search_results)
+	return jsonify(result)
 
 """ Route for a document in a local collection """
 @app.route("/result/<collection>/<filename>")
