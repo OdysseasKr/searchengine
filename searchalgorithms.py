@@ -131,7 +131,7 @@ def feedbackSearch(input_doc, R, NR, collection_name, limit=0., top_k=None):
 	if type(input_doc) is str:
 		input_doc = preprocess_query(input_doc)
 		q0 = Counter(input_doc)
-	elif type(input_doc) is str:
+	elif type(input_doc) is dict:
 		q0 = input_doc
 	else:
 		raise ValueError("Query must be a string or a dictionary")
@@ -150,12 +150,12 @@ def feedbackSearch(input_doc, R, NR, collection_name, limit=0., top_k=None):
 
 				doc_name = doc[0]  # get the name of the document
 				f_td = doc[1]  # get the frequency of the word for that document
-				TF_td = 1 + np.log(f_td)
+				TF_td = f_td
 				w_td = TF_td * IDF_t
 
 				t_num = qm[t]  # count how many times t shows in query
 				f_tq = t_num / len(input_doc)  # get the frequency of the word in the query
-				TF_tq = 1 + np.log(f_tq)
+				TF_tq = f_tq
 				w_tq = TF_tq * IDF_t
 				rank = w_td * w_tq
 
@@ -174,7 +174,7 @@ def feedbackSearch(input_doc, R, NR, collection_name, limit=0., top_k=None):
 	return list(zip(*results)[0]), qm
 
 def getNewQuery(q0, R, NR, index):
-	a = 1; b = 1; c = 1
+	a = 1; b = 0.5; c = 0.25
 	qm = {}
 	for w in q0:
 		qm[w] = a * q0[w]
