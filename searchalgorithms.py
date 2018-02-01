@@ -78,9 +78,6 @@ def vectorSearch(input_doc, collection_name, rank_algo='alt_dot', limit=0., top_
 		docs_with_word = index.getDocumentsByWord(t)  # get all the docs that contain this word
 		nt = len(docs_with_word)  # the number of docs containing the word
 
-		#TODO: N = 8 but nt = 120...
-		# nt must always be less or equal with N
-
 		if nt != 0:  # if no document contain the word, continue
 			IDF_t = np.log(1 + N/nt)
 			for doc in docs_with_word:  # for every document
@@ -90,15 +87,11 @@ def vectorSearch(input_doc, collection_name, rank_algo='alt_dot', limit=0., top_
 				TF_td = 1 + np.log(f_td)
 				w_td = TF_td * IDF_t
 
-				if (rank_algo=='dot'):
-					t_num = input_doc.count(t)  # count how many times t shows in query
-					f_tq = t_num / len(input_doc)  # get the frequency of the word in the query
-					TF_tq = 1 + np.log(f_tq)
-					w_tq = TF_tq * IDF_t
-					rank = w_td * w_tq
-				# elif (rank_algo=='alt_dot'):
-				else:
-					rank = w_td
+				t_num = input_doc.count(t)  # count how many times t shows in query
+				f_tq = t_num / len(input_doc)  # get the frequency of the word in the query
+				TF_tq = 1 + np.log(f_tq)
+				w_tq = TF_tq * IDF_t
+				rank = w_td * w_tq
 
 				if doc_name in docs_with_ranks:
 					docs_with_ranks[doc_name] += rank
@@ -109,7 +102,7 @@ def vectorSearch(input_doc, collection_name, rank_algo='alt_dot', limit=0., top_
 	sorted_docs = sorted(docs_with_ranks.items(), key=operator.itemgetter(1), reverse=True)
 
 	results = sorted_docs[:top_k]  # get just the top_k docs
-
+	print(results)
 	if len(results) == 0:
 		return []
 	return list(zip(*results)[0])
