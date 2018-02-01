@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+import pymongo
 
 HOST = 'localhost'
 PORT = 27017
@@ -110,6 +111,8 @@ class IndexCreator:
 		""" Stores the remaining of the index that resides in RAM, to the mongo db
 		"""
 		self.store()
+		self._collection.create_index([("word", pymongo.TEXT)])
+		self._doc_collection.create_index([("name", pymongo.TEXT)])
 
 class InvertedIndexDB:
 	""" Inverted index data structure stored in MongoDB
