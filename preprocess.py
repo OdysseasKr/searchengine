@@ -66,7 +66,8 @@ def preprocessCollection(name, uploaded=False):
 				descirption = 'Description unavailable'
 			db.setDocumentProperties(doc_name,
 										soup.title.string,
-										description)
+										description,
+										max(words_with_weights.values()))
 	db.close() # close index in order to be saved to disk
 
 if __name__ == '__main__':

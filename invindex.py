@@ -59,7 +59,7 @@ class IndexCreator:
 		else:
 			self._index[word].append((document,weight))
 
-	def setDocumentProperties(self, document, title, description):
+	def setDocumentProperties(self, document, title, description, max_f):
 		""" Sets the document properties
 		Parameters
 		----------
@@ -70,7 +70,8 @@ class IndexCreator:
 		self._docs[document] = {
 			"name": document,
 			"title": title,
-			"desc": description
+			"desc": description,
+			"max": max_f
 		}
 
 	def _store_word(self, word, values):
@@ -184,13 +185,14 @@ class InvertedIndexDB:
 		result = {w['word']: w['docs'][0]['weight'] for w in items}
 		return result
 
-	def setDocumentProperties(self, document, title, description):
+	def setDocumentProperties(self, document, title, description, max_f):
 		if self._doc_collection.find_one({"name": document}):
 			self._doc_collection.update_one(
 				{"name": document},
 				{"$set": {
-					"title":title,
-					"desc":description
+					"title": title,
+					"desc": description,
+					"max": max_f
 				}}
 			)
 

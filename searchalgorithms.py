@@ -72,6 +72,7 @@ def vectorSearch(input_doc, collection_name, rank_algo='alt_dot', limit=0., top_
 	docs_with_ranks = {}  # Dictionary with key: doc_name and value: rank
 
 	input_doc = preprocess_query(input_doc)
+	q = Counter(input_doc)
 
 	for t in input_doc:  # for every word of the input documents
 
@@ -84,12 +85,12 @@ def vectorSearch(input_doc, collection_name, rank_algo='alt_dot', limit=0., top_
 
 				doc_name = doc[0]  # get the name of the document
 				f_td = doc[1]  # get the frequency of the word for that document
-				TF_td = 1 + np.log(f_td)
+				maxl = float(index.getDocumentProperties(doc_name)["max"])
+				TF_td = f_td / maxl
 				w_td = TF_td * IDF_t
 
-				t_num = input_doc.count(t)  # count how many times t shows in query
-				f_tq = t_num / len(input_doc)  # get the frequency of the word in the query
-				TF_tq = 1 + np.log(f_tq)
+				f_tq = q[t]  # get the frequency of the word in the query
+				TF_tq = f_tq / float(max(q.values()))
 				w_tq = TF_tq * IDF_t
 				rank = w_td * w_tq
 
@@ -143,12 +144,12 @@ def feedbackSearch(input_doc, R, NR, collection_name, limit=0., top_k=None):
 
 				doc_name = doc[0]  # get the name of the document
 				f_td = doc[1]  # get the frequency of the word for that document
-				TF_td = f_td
+				maxl = float(index.getDocumentProperties(doc_name)["max"])
+				TF_td = f_td / maxl
 				w_td = TF_td * IDF_t
 
-				t_num = qm[t]  # count how many times t shows in query
-				f_tq = t_num / len(input_doc)  # get the frequency of the word in the query
-				TF_tq = f_tq
+				f_tq = qm[t]
+				TF_tq = f_tq / float(max(qm.values()))
 				w_tq = TF_tq * IDF_t
 				rank = w_td * w_tq
 
