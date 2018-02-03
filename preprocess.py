@@ -19,11 +19,11 @@ def preprocessCollection(name, uploaded=False):
 
 	# path to folder with html files
 	directory = 'collections/{}'.format(name)
+	pattern = "[a-zA-Z0-9-_]+\.(htm0l|htm)(\?.*)?"
 
 	# check every html file inside the folder
 	for filename in os.listdir(directory):
-
-		if filename.endswith(".html") or filename.endswith(".htm"):
+		if re.match(pattern, filename):
 			if not uploaded:
 				with open(directory + '/' + filename, 'r') as f:  #TODO: check if path is correct
 					doc_name = f.readline().strip()
