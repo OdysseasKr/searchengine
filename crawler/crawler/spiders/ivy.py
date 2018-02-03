@@ -42,7 +42,7 @@ class Spider(CrawlSpider):
                     is_allowed = True
             # If it is allowed, create a new item and add it to the list of found items
             if is_allowed:
-                path = '/home/mastermind/Projects/Anaktisi/sites/musicstore/'
+                path = '/PATH/TO/sites/musicstore/'
                 filename = path + response.url.split("/")[-1] + '.html'
                 with open(filename, 'wb') as f:
                     f.write(response.url + "\n")
