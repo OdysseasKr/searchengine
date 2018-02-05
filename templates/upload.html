@@ -6,9 +6,9 @@
 <body>
 	<div class="wrapper">
 		<h1>Find Dat(a)</h1>
-		<label for="collectionbox">Select files for a new collection</label>
 		<form id="mainform" method="post" enctype="multipart/form-data">
-			<input id="collectionbox" name="files" type="file" placeholder="Place files here">
+			<label for="collectionbox">Select a <strong>ZIP</strong> file containing the HTML files</label>
+			<input id="collectionbox" name="files" type="file" accept="application/zip" placeholder="Place files here">
 			<br>
 			<br>
 			<input id="namebox" name="name" type="text" placeholder="Collection name">
